@@ -43,11 +43,17 @@ class Frame:
 
         self.current_doc_data = dict()
 
-    def show_documents(self, query):
+    def show_documents(self, list_query, count_query):
         self.document_textbox.delete(1.0, "end")  # Очищаем Text перед выводом новых данных
 
-        print(list(collection.aggregate(query)))
-        # self.document_textbox.insert("end", collection.aggregate([{}]))
+        # имена футболистов для выборки
+        names_list = []
+
+        print(list(collection.aggregate(count_query))[0]["total_players"])
+        for i in range(len(list(collection.aggregate(list_query)))):
+            names_list.append(list(collection.aggregate(list_query))[i]['player_name'])
+        print(names_list)
+        self.document_textbox.insert("end", "Кол-во футболистов: "+str(list(collection.aggregate(count_query))[0]["total_players"])+"\n"+"\n".join(names_list))
 
     def get_results(self):
         what = self.what_entry.get()
@@ -80,7 +86,29 @@ class Frame:
             # Обработка некорректного сравнения
             print("Некорректное сравнение")
 
-        query = [
+        list_query = [
+            {
+                '$unwind': f"${key}"
+            },
+            {
+                "$match": {
+                    f"{key}.author": {"$exists": True}
+                }
+            },
+            {
+                '$group': {
+                    '_id': f'${key}.author',
+                    f'{key}_count': {'$sum': 1}
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0, "player_name": "$_id", f'{key}_count': 1
+                }
+            }
+        ]
+
+        count_query = [
             {
                 '$unwind': f"${key}"
             },
@@ -100,7 +128,7 @@ class Frame:
             }
         ]
 
-        self.show_documents(query)
+        self.show_documents(list_query, count_query)
         # print(str(query))
 
 root = Tk()
