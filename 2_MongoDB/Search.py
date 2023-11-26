@@ -74,7 +74,7 @@ class Frame:
             print("Некорректное сравнение")
 
         self.show_documents(query)
-        # print(str(query))
+        print(str(query))
 
 root = Tk()
 root.geometry("400x400")
