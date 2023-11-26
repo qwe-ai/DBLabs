@@ -10,7 +10,7 @@ collection = db["sokolova-teams"]
 class Frame:
     def __init__(self, root):
         self.root = root
-        self.root.title("Футбол")
+        self.root.title("Поиск")
         for i in range(2): root.grid_columnconfigure(index=i, weight=1)
         for j in range(5): root.grid_columnconfigure(index=j, weight=1)
 
@@ -58,7 +58,7 @@ class Frame:
 
         self.store_data(self.current_doc_data, keys, value)
 
-        print(self.current_doc_data)
+        # print(self.current_doc_data)
 
         self.key_entry.delete(0, "end")
         self.value_entry.delete(0, "end")
