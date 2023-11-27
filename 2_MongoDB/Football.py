@@ -14,7 +14,7 @@ collection = db["sokolova-teams"]
 class Frame:
     def __init__(self, root):
         self.root = root
-        self.root.title("Поиск")
+        self.root.title("Добавление ключей")
         for i in range(2): root.grid_columnconfigure(index=i, weight=1)
         for j in range(5): root.grid_columnconfigure(index=j, weight=1)
 

@@ -55,7 +55,7 @@ class Frame:
         self.current_doc_data = dict()
 
     def get_results(self):
-        self.document_textbox.delete(1.0, "end")  # Очищаем Text перед выводом новых данных
+        # self.document_textbox.delete(1.0, "end")  # Очищаем Text перед выводом новых данных
         # получаем значения из полей ввода
         category = self.category_entry.get()
         buyer = self.buyer_entry.get()
