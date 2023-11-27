@@ -4,7 +4,8 @@ from tkinter import Tk, Label, Entry, Button, Text
 import json
 
 # Подключение к базе данных
-client = MongoClient("mongodb://192.168.112.103/")
+# client = MongoClient("mongodb://192.168.112.103/")
+client = MongoClient("mongodb://localhost:27017/")
 db = client["22305"]
 collection = db["sokolova-games"]
 

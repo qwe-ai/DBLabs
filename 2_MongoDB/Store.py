@@ -4,7 +4,7 @@ from tkinter import Tk, Label, Entry, Button, Text
 import json
 
 # Подключение к базе данных
-client = MongoClient("mongodb://192.168.112.103/")
+client = MongoClient("mongodb://localhost:27017/")
 db = client["22305"]
 collection = db["sokolova-store"]
 
@@ -12,7 +12,7 @@ collection = db["sokolova-store"]
 class Frame:
     def __init__(self, root):
         self.root = root
-        self.root.title("Поиск")
+        self.root.title("Запросы")
         for i in range(2): root.grid_columnconfigure(index=i, weight=1)
         for j in range(5): root.grid_columnconfigure(index=j, weight=1)
 
@@ -49,20 +49,11 @@ class Frame:
         self.result_button = Button(root, text="Показать результаты", command=self.get_results)
         self.result_button.grid(row=5, column=0, columnspan=2, padx=10, pady=5, sticky="we")
 
-        self.document_textbox = Text(root)
-        self.document_textbox.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="we")
+        # self.document_textbox = Text(root)
+        # self.document_textbox.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="we")
 
         self.current_doc_data = dict()
 
-
-    # def show_documents(self, query):
-    #     self.document_textbox.delete(1.0, "end")  # Очищаем Text перед выводом новых данных
-    #
-    #     for document in collection.find(query):
-    #         self.document_textbox.insert("end",
-    #                                      json.dumps({x: document[x] for x in document if x not in "_id"}, indent=4,
-    #                                                 ensure_ascii=False) + '\n_______________________________________\n\n')
-    #
     def get_results(self):
         self.document_textbox.delete(1.0, "end")  # Очищаем Text перед выводом новых данных
         # получаем значения из полей ввода
@@ -104,17 +95,34 @@ class Frame:
         # список имен покупателей заданного товара, с доставкой фирмы с заданным названием
         query8 = list(collection.find({"name": item, "buyers.delivery_service": delivery}, {"buyers.name": 1}))
 
-        print("query1: "+str(query1))
-        print("query2: "+str(query2))
-        print("query3: "+str(query3))
-        print("query4: "+str(query4))
-        print("query5: "+str(query5))
-        print("query6: "+str(query6))
-        print("query7: "+str(query7))
-        print("query8: "+str(query8))
+        print(f"1. список названий товаров, относящихся к категории '{category}':")
+        for i in range(len(query1)):
+            print(query1[i]["name"])
+        print(f"\n2. список характеристик товаров из категории '{category}':")
+        for j in range(len(query2)):
+            print(query2[j]["features"])
+        print(f"\n3. список названий и стоимости товаров, купленных покупателем '{buyer}':")
+        for k in range(len(query3)):
+            print(query3[k]["name"]+": "+str(query3[k]["price"]))
+        print(f"\n4. список названий, производителей и цен на товары, имеющие цвет '{color}':")
+        for n in range(len(query4)):
+            print(query4[n]["name"]+": "+query4[n]["brand"]+", "+str(query4[n]["price"]))
+        print("\n5. общая сумма проданных товаров в каждой категории:")
+        for m in range(len(query5)):
+            print(query5[m]["total_sales"])
+        print("\n6. количество товаров в каждой категории:")
+        for z in range(len(query6)):
+            print(query6[z]["_id"]+": "+str(query6[z]["count"]))
+        print(f"\n7. список имен покупателей товара {item}:")
+        for x in range(len(query7)):
+            print(query7[x])
+        print(f"\n8. список имен покупателей товара {item}, с доставкой фирмы {delivery}:")
+        for t in range(len(query8)):
+            for u in range(len(query8[t]["buyers"])):
+                print(query8[t]["buyers"][u]["name"])
 
 root = Tk()
-root.geometry("400x400")
+root.geometry("300x200")
 frame = Frame(root)
 
 root.mainloop()
